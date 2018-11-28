@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const BookSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true 
     },
     author: {
         type: Schema.Types.ObjectId,
@@ -29,6 +29,7 @@ const BookSchema = new Schema({
 // Virtual for book's URL
 BookSchema.virtual('url').get(function () {
     return `/catalog/book/${this._id}`;
+    //return '/catalog/book/ ' + this._id;
 });
 
 // Export model
