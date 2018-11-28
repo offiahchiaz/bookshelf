@@ -21,7 +21,7 @@ const AuthorSchema = new Schema({
     date_of_death: {
         type: Date
     }
-});
+}); 
 
 // Virtual for author's full name
 AuthorSchema.virtual('name').get(function () {
@@ -29,10 +29,12 @@ AuthorSchema.virtual('name').get(function () {
 });
 // Virtual for author's lifespan
 AuthorSchema.virtual('lifespan').get(function () {
-    let birthYear = this.date_of_birth ? moment(this.date_of_birth).format('YYYY-MM-DD') : 'Not Available';
-    let deathYear = this.date_of_death ? moment(this.date_of_death).format('YYYY-MM-DD') : '';
-    //return `${deathYear} - ${birthYear}`;  
-    return birthYear;
+    let birthYear = this.date_of_birth ? moment(this.date_of_birth).format('MMMM Do, YYYY') : '';
+    let deathYear = this.date_of_death ? moment(this.date_of_death).format('MMMM Do, YYYY') : '';
+    if (birthYear === '' && deathYear === '') {
+        return 'Not available';
+    }
+    return `${birthYear} - ${deathYear}`;  
 });
 
 // Virtual for author's URL
