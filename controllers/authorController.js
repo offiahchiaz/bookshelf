@@ -146,7 +146,7 @@ exports.author_delete_post = (req, res, next) => {
 exports.author_update_get = (req, res, next) => {
     Author.findById(req.params.id, (err, author) => {
         if (err) { return next(err); }
-        if (results === null) {
+        if (author === null) {
             let err = new Error('Author not found');
             err.status = 404;
             return next(err);
@@ -157,6 +157,48 @@ exports.author_update_get = (req, res, next) => {
 };
 
 // Handle Author update on POST
-exports.author_update_post = (req, res) => {
-    res.send('NOT IMPLEMENTED: Author update POST');
-};
+exports.author_update_post = [
+
+    // Validate fields
+    body('first_name').isLength({min: 1}).trim().withMessage('First name must be specified.')
+        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('family_name').isLength({min: 1}).trim().withMessage('Family name must be specified.')
+        .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+    body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601(),
+    body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601(),
+
+    // Sanitize fields
+    sanitizeBody('first_name').trim().escape(),
+    sanitizeBody('family_name').trim().escape(),
+    sanitizeBody('date_of_birth').toDate(),
+    sanitizeBody('date_of_death').toDate(),
+
+    // Process request after validation and sanitization
+    (req, res, next) => {
+
+        // Extract the validation errors from a request
+        const errors = validationResult(req);
+
+        // Create a Book object with escaped/trimmed data and old id
+        let author = new Author({
+            _id: req.params.id, //This is required, or a new ID will be assigned!
+            first_name: req.body.first_name,
+            family_name: req.body.family_name,
+            date_of_birth: req.body.date_of_birth,
+            date_of_death: req.body.date_of_death
+        });
+
+        if(!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/errors messages
+            res.render('author_form', {title: 'Update Author', author, errors: errors.array()});
+            return;
+        } else {
+            // Data from form is valid
+            Author.findByIdAndUpdate(req.params.id, author, {}, (err, theauthor) => {
+                if (err) { return next(err); }
+                // Successful - redirect to author detail page
+                res.redirect(theauthor.url);
+            });
+        }
+    }
+];
