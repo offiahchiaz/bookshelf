@@ -1,5 +1,6 @@
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
+const async = require('async');
 
 const BookInstance = require('../models/bookinstance');
 const Book = require('../models/book');
@@ -135,7 +136,7 @@ exports.bookinstance_update_get = (req, res, next) => {
             return next(err);
         }
         // Success
-        res.render('bookinstance_form', {title: 'Update Book copy', books: results.books, selected_book : results.bookinstance.book._id, bookinstance: results.bookinstance});
+        res.render('bookinstance_form', {title: 'Update Book copy', book_list: results.books, selected_book : results.bookinstance.book._id, bookinstance: results.bookinstance});
     });
 };
 
