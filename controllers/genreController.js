@@ -145,7 +145,7 @@ async.parallel({
 
 // Display Genre update form on GET
 exports.genre_update_get = (req, res, next) => {
-    
+
     Genre.findById(req.params.id, (err, genre) => {
         if (err) { return next(err); }
         if (genre === null) {
@@ -159,6 +159,34 @@ exports.genre_update_get = (req, res, next) => {
 };
 
 // Handle Genre update on POST
-exports.genre_update_post = (req, res) => {
-    res.send('NOT IMPLEMENTED: Genre update POST');
-};
+exports.genre_update_post = [
+    // Validate that the name field is not empty
+    body('name', 'Genre name required').isLength({min: 1}).trim(),
+
+    // Sanitize (trim and escape) the name field
+    sanitizeBody('name').trim().escape(),
+
+    // Process request after validation and sanitization
+    (req, res, next) => {
+        // Extract the validation errors from a request
+        const errors = validationResult(req);
+
+        // Create a Book object with escaped/trimmed data and old id
+        let genre = new Genre({
+            _id: req.params.id,
+            name: req.body.name
+        });
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized values/error messages
+            res.render('genre_form', {title: 'Create Genre', genre: genre, errors: errors.array()});
+            return;
+        } else {
+            Genre.findByIdAndUpdate(req.params.id, genre, {}, (err, thegenre) => {
+                if (err) { return next(err); }
+                // Successful - redirect to genre detail page
+                res.redirect(thegenre.url);
+            });
+        }
+    }
+];
