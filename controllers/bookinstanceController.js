@@ -124,7 +124,7 @@ exports.bookinstance_update_get = (req, res, next) => {
         bookinstance: (callback) => {
             BookInstance.findById(req.params.id).populate('book').exec(callback);
         },
-        book: (callback) => {
+        books: (callback) => {
             Book.find(callback);
         },
     }, (err, results) => {
@@ -135,11 +135,57 @@ exports.bookinstance_update_get = (req, res, next) => {
             return next(err);
         }
         // Success
-        res.render('bookinstance_form', {title: 'Update Book copy', book: results.book, bookinstance: results.bookinstance});
+        res.render('bookinstance_form', {title: 'Update Book copy', books: results.books, selected_book : results.bookinstance.book._id, bookinstance: results.bookinstance});
     });
 };
 
 // Handle bookinstance update on POST
-exports.bookinstance_update_post = (req, res) => {
-    res.send('NOT IMPLEMENTED: BookInstance update POST');
-};
+exports.bookinstance_update_post = [
+
+    // Validate fields
+    body('book', 'Book must be specified').isLength({ min: 1}).trim(),
+    body('imprint', 'Imprint must be specified').isLength({ min: 3 }).trim(),
+    body('due_back', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
+
+    // Sanitize fields
+    sanitizeBody('book').trim().escape(),
+    sanitizeBody('imprint').trim().escape(),
+    sanitizeBody('status').trim().escape(),
+    sanitizeBody('due_back').toDate(),
+
+    // Process request after validation and sanitization
+    (req, res, next) => {
+
+        // Extract the validation errors from a request
+        const errors = validationResult(req);
+
+        // Create a BookInstance object with escaped and trimmed data
+        let bookinstance = new BookInstance({
+            _id: req.params.id, //This is required, or a new ID will be assigned!
+            book: req.body.book,
+            imprint: req.body.imprint,
+            status: req.body.status,
+            due_back: req.body.due_back
+        });
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values and error messages
+            Book.find({}, 'title')
+                .exec((err, books) => {
+                    if (err) { return next(err); }
+                    // Successful, so render
+                    res.render('bookinstance_form', {title: 'Update Book copy', book_list: books, selected_book: bookinstance.book._id, errors: errors.array(), bookinstance: bookinstance});
+                });
+                return;
+        } else {
+           // Data from form is valid. Update the record
+           BookInstance.findByIdAndUpdate(req.params.id, bookinstance, {}, (err, thebookinstance) => {
+            if (err) { return next(err); }
+            // Successful - redirect to bookinstance detail page
+            res.redirect(thebookinstance.url);
+           }); 
+        }
+    }
+
+    
+];
