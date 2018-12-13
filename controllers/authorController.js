@@ -144,7 +144,7 @@ exports.author_delete_post = (req, res, next) => {
 
 // Display Author update form on GET
 exports.author_update_get = (req, res, next) => {
-    
+
     Author.findById(req.params.id, (err, author) => {
         if (err) { return next(err); }
         if (author === null) {
@@ -198,7 +198,7 @@ exports.author_update_post = [
             Author.findByIdAndUpdate(req.params.id, author, {}, (err, theauthor) => {
                 if (err) { return next(err); }
                 // Successful - redirect to author detail page
-                res.redirect(theauthor.url);
+                res.redirect(theauthor.url);  
             });
         }
     }
