@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    name: {
+        type: String,
+        minlength: 1,
+        required: true
+    },
     email: {
         type: String,
         trim: true,
@@ -18,9 +23,9 @@ const UserSchema = new Schema({
         required: true,
         minlength: 6
     },
-    address: {
-        type: String,
-        trim: true
+    date: {
+        type: Date,
+        default: Date.now 
     }
 });
 
