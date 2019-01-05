@@ -7,4 +7,14 @@ router.get('/', function(req, res, next) {
   res.redirect('/catalog');
 });
 
+// // Welcome Page
+// router.get('/', (req, res) => {
+//   res.render('welcome');
+// });
+
+// // Dashboard
+// router.get('/dashboard', (res, req) => {
+//   res.render('dashboard');
+// });
+
 module.exports = router;

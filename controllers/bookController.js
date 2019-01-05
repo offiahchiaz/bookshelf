@@ -7,7 +7,7 @@ const Author = require('../models/author');
 const Genre = require('../models/genre');
 const BookInstance = require('../models/bookinstance');
 
-exports.index = (req, res) => {
+exports.dashboard = (req, res) => {
     
     async.parallel({
         book_count: (callback) => {
@@ -26,7 +26,7 @@ exports.index = (req, res) => {
             Genre.countDocuments({}, callback);
         }
     }, (err, results) => {
-        res.render('index', {title: 'Bookshelf Home', error: err, data: results});
+        res.render('dashboard', {title: 'Bookshelf Dashboard', error: err, data: results});
     });
 };
 
