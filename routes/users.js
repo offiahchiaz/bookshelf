@@ -20,4 +20,7 @@ router.get('/', user_controller.index);
 // GET request for user login
 router.get('/login', user_controller.login_get);
 
+// GET request for user signup
+router.get('/signup', user_controller.signup_get);
+
 module.exports = router;

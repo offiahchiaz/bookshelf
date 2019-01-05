@@ -7,3 +7,7 @@ exports.index = (req, res) => {
 exports.login_get = (req, res) => {
     res.render('login', {title: 'User Login'});
 };
+
+exports.signup_get = (req, res) => {
+    res.render('signup', {title: 'User Signup'});
+};
