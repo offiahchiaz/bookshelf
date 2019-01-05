@@ -2,18 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 // Require controller modules
-const user_controller = require('../controllers/userController');
 const book_controller = require('../controllers/bookController');
 const author_controller = require('../controllers/authorController');
 const genre_controller = require('../controllers/genreController');
 const book_instance_controller = require('../controllers/bookinstanceController');
 
-// ================== USER ROUTES ================== 
-router.get('/', user_controller.index);
 
 // ================== BOOK ROUTES ==================
 
-// GET catalog home page
+// GET catalog dahsboard
 router.get('/book/dashboard', book_controller.dashboard);
 
 // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
