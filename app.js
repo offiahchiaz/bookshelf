@@ -15,13 +15,15 @@ const app = express();
 
 // Set up mongoose connection
 const mongoose = require('mongoose');
-// mongodb://<dbuser>:<dbpassword>@ds145128.mlab.com:45128/bookshelf
-//const mongoDB = 'mongodb://localhost:27017/bookshelf';
-const mongoDB =  'mongodb://offiahchiaz:myogi2014@ds145128.mlab.com:45128/bookshelf';
-mongoose.connect(mongoDB, {useNewUrlParser: true});
-mongoose.Promise = global.Promise;
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// DB config
+const db = require('./config/keys').MongoURI;
+
+// Connect to MongoDB
+mongoose.connect(db, {useNewUrlParser: true})
+  .then(() => console.log('MongoDB connected...'))
+  .catch((err) => console.log(err));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
