@@ -32,7 +32,7 @@ exports.signup_post = (req, res) => {
 
     // Check passwords match
     if (password !== password2) {
-        ErrorEvent.push({msg: 'Passwords do not match'});
+        errors.push({msg: 'Passwords do not match'});
     }
 
     // Check password length
@@ -59,7 +59,7 @@ exports.signup_post = (req, res) => {
 
                     // Hash password
                     bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                        bcrypt.hash(newUser.password, salt, null, (err, hash) => {
                             if (err) throw err;
                             // Set password to hashed
                             newUser.password = hash;
