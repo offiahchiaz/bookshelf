@@ -21,7 +21,7 @@ exports.signup_get = (req, res) => {
 };
 
 // Handle user signup on POST
-router.signup_post = (req, res) => {
+exports.signup_post = (req, res) => {
     const {name, email, password, password2} = req.body;
     let errors = [];
 

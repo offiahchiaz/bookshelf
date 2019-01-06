@@ -20,6 +20,7 @@ html(lang='en')
                 div(class="card card-body")
                     h1( class="text-center mb-3")
                         i(class="fas fa-sign-in-alt")  Login
+                    include partials/messages.pug
                     form(action="/users/login" method="POST")
                         div(class="form-group")
                             label(for="email") Email
