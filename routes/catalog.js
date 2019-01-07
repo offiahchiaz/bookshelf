@@ -11,7 +11,7 @@ const book_instance_controller = require('../controllers/bookinstanceController'
 // ================== BOOK ROUTES ==================
 
 // GET catalog dahsboard
-router.get('/book/dashboard', book_controller.dashboard);
+router.get('/', book_controller.dashboard);
 
 // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
 router.get('/book/create', book_controller.book_create_get);

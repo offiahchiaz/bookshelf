@@ -26,6 +26,7 @@ exports.dashboard = (req, res) => {
             Genre.countDocuments({}, callback);
         }
     }, (err, results) => {
+        if (err) { console.log(err); }
         res.render('dashboard', {title: 'Bookshelf Dashboard', error: err, data: results});
     });
 };

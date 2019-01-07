@@ -15,6 +15,15 @@ exports.login_get = (req, res) => {
     res.render('login', {title: 'User Login'});
 };
 
+// Handle user login on POST
+exports.login_post = ('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/catalog',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res, next);
+});
+
 // Display signup on GET
 exports.signup_get = (req, res) => {
     res.render('signup', {title: 'User Signup'});

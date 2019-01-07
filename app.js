@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
@@ -13,8 +14,9 @@ const catalogRouter = require('./routes/catalog');
 
 const app = express();
 
-// Set up mongoose connection
-const mongoose = require('mongoose');
+// Passport config
+require('./config/passport')(passport);
+
 
 // DB config
 const db = require('./config/keys').MongoURI;
