@@ -14,7 +14,7 @@ exports.index = (req, res) => {
             BookInstance.countDocuments({}, callback);
         },
         book_instance_available_count: (callback) => {
-            BookInstance.countDocuments({status:'Available'}, callback);
+            BookInstance.countDocuments({status: 'Available'}, callback);
         },
         author_count: (callback) => {
             Author.countDocuments({}, callback);
@@ -23,7 +23,7 @@ exports.index = (req, res) => {
             Genre.countDocuments({}, callback);
         }
     }, (err, results) => {
-        res.render('index', { title: 'Local Library Home', error: err, data: results });
+        res.render('catalog/catalog', { title: 'Bookshelf - catalog', err, results });
     });
 };
 
