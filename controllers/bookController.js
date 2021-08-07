@@ -23,13 +23,19 @@ exports.index = (req, res) => {
             Genre.countDocuments({}, callback);
         }
     }, (err, results) => {
-        res.render('catalog/catalog', { title: 'Bookshelf - catalog', err, results });
+        res.render('catalog/catalog', { title: 'Bookshelf - Catalog Home', err, results });
     });
 };
 
 // Display list of all books.
-exports.book_list = (req, res) => {
-    res.send('NOT IMPLEMENTED: Book list');
+exports.book_list = (req, res, next) => {
+    Book.find({}, 'title author')
+        .populate('author')
+        .exec((err, list_books) => {
+            if (err) { return next(err); }
+            //Successful, so render
+            res.render('catalog/book_list', { title: 'Book List', list_books });
+        });
 };
 
 // Display detail page for a specific book.
