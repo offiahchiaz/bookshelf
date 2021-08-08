@@ -31,7 +31,7 @@ exports.genre_detail = (req, res, next) => {
             return next(err);
         }
         // Successful, so render
-        res.render('genre_detail', { title: 'Genre Detail', genre: results.genre, genre_books: results.genre_books });
+        res.render('catalog/genre_detail', { title: 'Genre Detail', genre: results.genre, genre_books: results.genre_books });
     });
 };
 
